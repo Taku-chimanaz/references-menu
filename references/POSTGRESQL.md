@@ -1,50 +1,77 @@
 # POSTGRESQL REFERENCE
 
-This serves as a reference document for the postgresql commands.
+![PostgreSQL logo](./../images/postgresql.svg)
 
-# PREREQUISITES
+I have created this reference document to help me reference or recall commands I have learnt and avoid many google searches for the command I want.Please note that this list only reflect on commands that I have learnt and does not exhaust all the commands.It can also serve as a starting point for anyone who wants to learn about PostgreSQL but do not know where to begin.Hope this helps.
 
-For you to be able to follow along you need to have the following installed on your system:
+# Prerequisites
 
-1. POSTGRESQL
+You need to have POSTGRESQL installed on your system.
 
-For installation of POSTGRESQL correctly please watch the video below.It will take you through installing the POSTGRESQL on your system and adding it to your environmental variables.
+#### Installation on windows
 
-[![Video Title](https://img.youtube.com/vi/GpqJzWCcQXY&t=492s/0.jpg)](https://www.youtube.com/watch?v=GpqJzWCcQXY&t=492s)
+https://www.youtube.com/watch?v=GpqJzWCcQXY
+
+#### Installation on linux
+
+https://www.youtube.com/watch?v=cD32EHVWRXY
+
+#### Installation on mac
+
+https://www.youtube.com/watch?v=a78hxM4-99A
+
+After successful installation you can then run these commands in the psql command line.
+<br>
 
 # Commands
 
-## CREATE A DATABASE
+### CREATE A DATABASE
 
-```postgresql
-CREATE DATABASE [database_name]
-
--- Example
-
-CREATE DATABASE demo_db
-```
-
-## DROP A DATABASE
+#### Command Syntax
 
 ```postgresql
 DROP DATABASE [database_name]
+```
 
--- Example
+#### Example
 
+```postgresql
+DROP DATABASE demo_db
+```
+
+<br>
+
+### DROP A DATABASE
+
+#### Command Syntax
+
+```postgresql
+DROP DATABASE [database_name]
+```
+
+#### Example
+
+```postgresql
 DROP DATABASE demo_db
 ```
 
 **_NB: This command is dangerous to use especially in production.It results in permanent deletion of data and if there is no backup of said data,it will be lost forever._**
 
-## CREATE A TABLE IN A DATABASE
+<br>
+
+### CREATE A TABLE IN A DATABASE
+
+#### Command Syntax
 
 ```postgresql
 CREATE TABLE [table_name](
     Column name + data type + constraints
 )
+```
 
--- Example
+#### Example
 
+```postgresql
 CREATE TABLE product(
     id BIGSERIAL NOT NULL PRIMARY KEY,
     product_name VARCHAR(50) NOT NULL,
@@ -62,26 +89,36 @@ CREATE TABLE product(
 - Constraint is just a rule enforces to a column or table.This improves data reliability, accuracy and integrity.
 - In the above example we are saying: id cannot be null and it is also a primary key.
 
-## DROP A TABLE IN A DATABASE
+<br>
+
+### DROP A TABLE IN A DATABASE
+
+#### Command Syntax
 
 ```postgresql
-DROP TABLE [table_name]
+DROP DATABASE [table_name]
+```
 
--- Example
+#### Example
 
-DROP TABLE product
+```postgresql
+DROP DATABASE product
 ```
 
 **_NB: This command is dangerous to use especially in production.It results in permanent deletion of data and if there is no backup of said data,it will be lost forever._**
 
-## INSERTION OF A RECORD IN A DATABASE
+### INSERTION OF A RECORD IN A DATABASE
+
+#### Command Syntax
 
 ```postgresql
 INSERT INTO TABLE [database_name](column 1, column 2)
 VALUES(value1, value2);
+```
 
--- Example
+#### Example
 
+```postgresql
 INSERT INTO product(product_name, product_desc, product_price)
 VALUES('Carrots', 'Carrots Desc', 10.00);
 ```
