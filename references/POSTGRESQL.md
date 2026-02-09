@@ -29,13 +29,13 @@ After successful installation you can then run these commands in the psql comman
 
 #### Command Syntax
 
-```postgresql
+```sql
 DROP DATABASE [database_name]
 ```
 
 #### Example
 
-```postgresql
+```sql
 DROP DATABASE demo_db
 ```
 
@@ -45,13 +45,13 @@ DROP DATABASE demo_db
 
 #### Command Syntax
 
-```postgresql
+```sql
 DROP DATABASE [database_name]
 ```
 
 #### Example
 
-```postgresql
+```sql
 DROP DATABASE demo_db
 ```
 
@@ -63,7 +63,7 @@ DROP DATABASE demo_db
 
 #### Command Syntax
 
-```postgresql
+```sql
 CREATE TABLE [table_name](
     Column name + data type + constraints
 )
@@ -71,7 +71,7 @@ CREATE TABLE [table_name](
 
 #### Example
 
-```postgresql
+```sql
 CREATE TABLE product(
     id BIGSERIAL NOT NULL PRIMARY KEY,
     product_name VARCHAR(50) NOT NULL,
@@ -95,13 +95,13 @@ CREATE TABLE product(
 
 #### Command Syntax
 
-```postgresql
+```sql
 DROP DATABASE [table_name]
 ```
 
 #### Example
 
-```postgresql
+```sql
 DROP DATABASE product
 ```
 
@@ -111,14 +111,14 @@ DROP DATABASE product
 
 #### Command Syntax
 
-```postgresql
+```sql
 INSERT INTO TABLE [database_name](column 1, column 2)
 VALUES(value1, value2);
 ```
 
 #### Example
 
-```postgresql
+```sql
 INSERT INTO product(product_name, product_desc, product_price)
 VALUES('Carrots', 'Carrots Desc', 10.00);
 ```
