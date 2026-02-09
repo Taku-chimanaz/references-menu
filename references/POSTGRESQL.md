@@ -249,8 +249,44 @@ SELECT * FROM [table_name] WHERE  [specified_condition] ;
 SELECT * FROM product WHERE product_price > 3.00 AND expiration_date = '2026-02-10'
 ```
 
-#### Example
+#### Example 2
 
 ```sql
 SELECT * FROM product WHERE product_price > 3.00 OR product_price = 3.50;
 ```
+
+<br>
+
+### LIMIT,OFFSET,FETCH Commands
+
+```
+LIMIT - is used to specify the number of records to return.
+FETCH - works the same way as LIMIT but FETCH is the SQL standard.
+OFFSET - SPECIFY to return elements after a certain number.
+```
+
+#### LIMIT
+
+```sql
+SELECT * FROM product LIMIT 10;
+```
+
+- Returning only 10 records from the product table;
+
+#### FETCH
+
+```sql
+SELECT * FROM product FETCH FIRST 10;
+```
+
+- Returning only 10 records from the product table;
+- You can also use LAST command to return the LAST 10 values;
+- [More info](https://www.postgresql.org/docs/current/sql-fetch.html) on FETCH.
+
+#### OFFSET
+
+```sql
+SELECT * FROM product OFFSET 5;
+```
+
+- Return all records after the fifth record
