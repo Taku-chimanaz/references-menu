@@ -30,13 +30,13 @@ After successful installation you can then run these commands in the psql comman
 #### Command Syntax
 
 ```sql
-DROP DATABASE [database_name]
+CREATE DATABASE [database_name]
 ```
 
 #### Example
 
 ```sql
-DROP DATABASE demo_db
+CREATE DATABASE demo_db
 ```
 
 <br>
