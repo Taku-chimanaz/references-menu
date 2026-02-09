@@ -367,3 +367,16 @@ SELECT * FROM product WHERE product_name iLIKE '_Pespi%';
 - It can match strings like "zPespi", "ePepsi", etc
 
 <br>
+
+### GROUP BY
+
+- This command allows us to group records that share same value in a column or columns
+
+#### Example 1
+
+```sql
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth;
+```
+
+- We are selecting column country_of_birth and grouping records by country_of_birth and get a count of all these records.
+  ![PostgreSQL logo](./../images/group_by.png)
