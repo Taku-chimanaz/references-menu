@@ -219,7 +219,21 @@ SELECT DISTINCT product_price FROM product ORDER BY product_price;
 
 <br>
 
-### WHERE and AND Clause
+### Comparison Operators
+
+- Used to compare values
+- Returns true or false on operations
+
+```
+y = x -> Equal
+x < y -> Less than
+x > y -> Greater than
+x <= y -> Less than or equal to
+x >= y -> Greater than or equal to
+x <> y -> Not equal to
+```
+
+### WHERE , AND , OR Clause
 
 - These commands are used to filter records using specified conditions
 
