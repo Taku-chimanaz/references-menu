@@ -199,3 +199,44 @@ SELECT product_name, product_price FROM product ORDER BY product_price DESC;
 <br>
 
 ### DISTINCT
+
+- This command is used to return unique values found for specific table column e.g in a table we can have 50 rows with different gender(20 males, 20 female, 10 rather not say).
+- This commands only return 3 values (male, female, rather not say).
+
+#### Command Syntax
+
+```sql
+SELECT DISTINCT [column_name] FROM [table_name] ORDER BY [column_name];
+```
+
+#### Example
+
+```sql
+SELECT DISTINCT product_price FROM product ORDER BY product_price;
+```
+
+- We are selecting unique prices from the product table and then order them by product_price in ascending order;
+
+<br>
+
+### WHERE and AND Clause
+
+- These commands are used to filter records using specified conditions
+
+#### Command Syntax
+
+```sql
+SELECT * FROM [table_name] WHERE  [specified_condition] ;
+```
+
+#### Example
+
+```sql
+SELECT * FROM product WHERE product_price > 3.00 AND expiration_date = '2026-02-10'
+```
+
+#### Example
+
+```sql
+SELECT * FROM product WHERE product_price > 3.00 OR product_price = 3.50;
+```
