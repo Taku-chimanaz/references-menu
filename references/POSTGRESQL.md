@@ -290,3 +290,80 @@ SELECT * FROM product OFFSET 5;
 ```
 
 - Return all records after the fifth record
+
+### IN Command
+
+- Allows you to return records that matches on of the values you have specified
+- Treat it like a chain of OR statements but easier to read.
+
+```sql
+SELECT * from users WHERE user_role IN('admin', 'editor');
+```
+
+- This commands returns users with a user_role which is admin OR editor only;
+
+<br>
+
+### BETWEEN
+
+- IT is used to fetch records between specified parameters
+
+#### Command Syntax
+
+```sql
+SELECT * FROM person
+WHERE date_of_birth
+BETWEEN 'date1' AND 'date2';
+```
+
+#### Example
+
+```sql
+SELECT * FROM person
+WHERE date_of_birth
+BETWEEN '2000-01-01' AND '2026-01-01';
+```
+
+<br>
+
+### LIKE and iLIKE Commands
+
+```
+Like command is used to match a specified pattern
+iLIKE command
+```
+
+#### Example 1
+
+```sql
+SELECT * FROM person WHERE email LIKE '%gmail.com';
+```
+
+- This commands returns records that have email addresses that ends with **_gmail.com_**
+
+#### Example 2
+
+```sql
+SELECT * FROM product WHERE product_name LIKE 'Pespi%';
+```
+
+- This returns all the products that starts with **_Pepsi_**
+
+#### Example 3
+
+```postgres
+SELECT * FROM product WHERE product_name iLIKE 'Pespi%';
+```
+
+- iLIKE commands makes the pattern case insensitive e.g it can make pepsi,Pepsi,PEPSI,etc
+
+#### Example 4
+
+```postgres
+SELECT * FROM product WHERE product_name iLIKE '_Pespi%';
+```
+
+- the underscore in **_\_Pespsi%_** allows you to match a single character before pepsi
+- It can match strings like "zPespi", "ePepsi", etc
+
+<br>
