@@ -1,6 +1,8 @@
 # POSTGRESQL REFERENCE
 
-This serves as a reference document for the postgresql commands.
+![PostgreSQL logo](./../images/postgresql.svg)
+
+I have created this reference document to help me reference or recall commands I have learnt and avoid many google searches for the command I want.Please note that this list only reflect on commands that I have learnt and does not exhaust all the commands.It can also serve as a starting point for anyone who wants to learn about PostgreSQL but do not know where to begin.Hope this helps.
 
 # PREREQUISITES
 
@@ -16,21 +18,30 @@ For installation of POSTGRESQL correctly please watch the video below.It will ta
 
 ## CREATE A DATABASE
 
+#### Command Syntax
+
 ```postgresql
-CREATE DATABASE [database_name]
+DROP DATABASE [database_name]
+```
 
--- Example
+#### Example
 
-CREATE DATABASE demo_db
+```postgresql
+DROP DATABASE demo_db
 ```
 
 ## DROP A DATABASE
 
+#### Command Syntax
+
 ```postgresql
 DROP DATABASE [database_name]
 
--- Example
+```
 
+#### Example
+
+```postgresql
 DROP DATABASE demo_db
 ```
 
