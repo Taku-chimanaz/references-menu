@@ -30,13 +30,13 @@ After successful installation you can then run these commands in the psql comman
 #### Command Syntax
 
 ```sql
-DROP DATABASE [database_name]
+CREATE DATABASE [database_name]
 ```
 
 #### Example
 
 ```sql
-DROP DATABASE demo_db
+CREATE DATABASE demo_db
 ```
 
 <br>
@@ -107,6 +107,8 @@ DROP DATABASE product
 
 **_NB: This command is dangerous to use especially in production.It results in permanent deletion of data and if there is no backup of said data,it will be lost forever._**
 
+<br>
+
 ### INSERTION OF A RECORD IN A DATABASE
 
 #### Command Syntax
@@ -128,3 +130,72 @@ VALUES('Carrots', 'Carrots Desc', 10.00);
 - We are inserting a row in our product table.
 - We specified the columns that we are populating with data in that table e.g product_name, product_desc, product_price.
 - You noticed that we did not add id to the row and this is because it is auto incremented by the database.
+
+<br>
+
+### SELECT Command
+
+#### Command Syntax
+
+```sql
+Select * FROM [table_name];
+```
+
+#### Example
+
+```sql
+SELECT * FROM product;
+```
+
+#### Explanation
+
+- We are selecting all (\*) columns in the database and return the records
+
+We can also specify the columns that we want to return as follows:
+
+```sql
+SELECT product_name, product_price FROM product;
+```
+
+This only returns rows with the columns product_name and product_price.
+
+Note that these commands returns all the records in that specified table
+
+<br>
+
+### ORDERING
+
+- Ordering can be by ascending order or descending order
+- By default the ordering is in ascending order.
+
+#### Command Syntax
+
+```sql
+SELECT * FROM [table_name] ORDER BY [column_name];
+```
+
+- We are selecting all the columns and returning all the rows in the table.
+- The returned records are beign ordered by column_name in ascending order.
+
+#### Example
+
+```sql
+SELECT * FROM product ORDER BY product_price;
+```
+
+- Here we are saying select all columns in every row in the product table and return them.
+- But before you return them order them by product_price in ascending order.
+
+#### Example 2
+
+```sql
+SELECT product_name, product_price FROM product ORDER BY product_price DESC;
+```
+
+- Here we are selecting columns: product_name and product_price from the product table rows and order them by product_price in descending order.
+
+**_NB:Note the if we do not specify the ordering type in is going to be in Ascending Order (ASC) and Descending order is denoted by DESC_**
+
+<br>
+
+### DISTINCT
