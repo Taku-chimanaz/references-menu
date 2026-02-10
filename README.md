@@ -4,4 +4,5 @@ This repo serves as collection of references markdowns I have compiled while stu
 
 # REFERENCES MENU
 
-- [POSTGRESQL REFERENCE](references/POSTGRESQL.md) - Check this out for POSTGRESQL commands references and it also tailored to be used like a crash course.Please note that this does not provide all commands but it gives you a starting point
+1. [POSTGRESQL REFERENCE](references/POSTGRESQL.md)
+1. [SPRINGBOOT REFERENCE](references/SPRINGBOOT.md)
