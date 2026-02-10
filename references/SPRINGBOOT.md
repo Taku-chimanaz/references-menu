@@ -261,3 +261,44 @@ public class AppConfig {
 
 - Environment Beans
 - Injectable
+
+```java
+// injecting the environment bean
+
+private Environment environment;
+
+@Autowired
+public void setEnviornment(Environment environment){
+    this.environment = environment;
+}
+
+public String getJavaVersion(){
+    return environment.getProperty("java.version");
+}
+```
+
+### Ways of fetching a bean
+
+```java
+public static void main(String[] args){
+    var ctx = SpringApplication.run(ExampleApplication.class, args);
+
+    MyFirstClass myFirstClass = ctx.getBean(MyFirstClass.class)
+    MyFirstClass myFirstClass = ctx.getBean("myBeanName", MyFirstClass.class)
+}
+```
+
+### Reading From Custom Properties
+
+```java
+@PropertySource("classpath:custom.properties")
+@PropertySources({
+    @PropertySource("classpath:custom.properties"),
+    @PropertySource("classpath:custom2.properties")
+})
+
+@Value("${my.prop }")
+private String myProp;
+```
+
+### PROFILES
