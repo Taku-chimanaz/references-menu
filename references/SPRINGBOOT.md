@@ -297,8 +297,186 @@ public static void main(String[] args){
     @PropertySource("classpath:custom2.properties")
 })
 
-@Value("${my.prop }")
+@Value("${my.prop}")
 private String myProp;
 ```
 
 ### PROFILES
+
+- To change the active profile you can change it in project properties.
+- You also need to create a .properties file for that profile e.g for a dev profile - application-dev.properties.
+
+```properties
+spring.profile.active=dev
+spring.profile.active=test,dev
+```
+
+The last one here is the one that will be active
+
+To make a bean available for a certain profile/environment we say
+
+```java
+@Bean
+@Profile("dev")
+public FirstBean myFirstBean(){
+    return new FirstBean();
+}
+```
+
+## Spring Rest
+
+### HTTP Methods
+
+GET - fetch a resource from the server
+POST - used to create a new resource
+PUT - used to update an existing resource or create a new one if it does not exist
+DELETE - used to delete a resource
+PATCH - this is used for partial updates to the resource as compared to PUT which is used for full updates.
+OPTIONS - used to find the methods allows for a specific url
+HEAD - used to return head of a resource
+
+### Status Codes
+
+1xx - Informational\
+2xx - Success\
+3xx - Redirection\
+4xx - Client Error\
+5xx - Server Error\
+
+### 2xx - Success
+
+200 - OK (successful http response)\
+201 - Created (successful and new resource was created)\
+204 - No Content (successful request and no content sent back to the client)\
+
+### 3xx - Redirection
+
+304 - NOT Modified
+
+### 4xx - Client Error
+
+400 - Bad Request (Client provided bad data)\
+401 - Unauthorized (Request requires auth,if auth has been done it mean user lack authority for that request)\
+403 - Forbidden (Client does not necessary authorization for the specific request).Unlike the 401 Unauthorized re-Authorization here does not make a difference.The server uses this code when it does not want to review why a request was denied or when no other status is applicable.
+
+### 5xx - Server Error
+
+500 - Internal Server Error (Given when an unexpected error happens and there is no specific message to send)\
+503 - Service unavailable (Specifies that the server is not available at the moment)
+
+### Rest Implementation
+
+```java
+
+@RestController
+public FirstController {
+
+    @GetMapping("/hello-world")
+    @ResponseStatus(HttpStatus.OK)
+    public String sayHelloWorld(){
+        return "Hello World"
+    }
+
+    @PostMapping("/post-from-world")
+    public String post(@RequestBody String message){
+        return "Message: " + message
+    }
+
+}
+```
+
+To mark a java class as a controller we use the @RestController annotation\
+The Http Methods for a specific method are marked by the mapping annotations e.g @GetMapping\
+If you need to specify the return status code you can that by using the @ResponseStatus anotation
+The @RequestBody annotation specifies that the passed parameter is a request body
+
+## Converting JSON object to Java Object
+
+```java
+public Order {
+
+    private String productName;
+    private int productQauntity;
+    private double productPrice;
+}
+```
+
+```java
+
+@RestController
+public FirstController {
+
+    @GetMapping("/hello-world")
+    @ResponseStatus(HttpStatus.OK)
+    public String sayHelloWorld(){
+        return "Hello World"
+    }
+
+    @PostMapping("/post-from-world")
+    public String post(@RequestBody Order order){
+        return "Message: " + order.toString()
+    }
+
+}
+```
+
+If converting your json(RequestBody) to a java Class object you cannot just create a class without accessors as we have done above it will give values default values.\
+You need to do the following so that you Order object is correctly populated
+
+```java
+public Order {
+
+    private String productName;
+    private int productQauntity;
+    private double productPrice;
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public int getProductQuantity() {
+        return productQuantity;
+    }
+
+    public int getProductPrice() {
+        return productPrice;
+    }
+
+      public String setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public int getProductQuantity(int productQuantity) {
+        this.productQuantity = productQuantity;
+    }
+
+    public int getProductPrice(double productPrice) {
+        this.productPrice = productPrice;
+    }
+
+    @Override
+    public String toString(){
+        // return .....
+    }
+}
+```
+
+Here we have provided accessor (getters and setters) which are mutators which will set your object and then return the provided values when toString method is invocked
+
+## JSON mapping in a class
+
+Let say we have a json from a client with property name p-price instead of productPrice\
+We can map this to our order class without having to stand the field name using @JsonPropery annotation.
+
+```java
+public Order {
+
+
+    private String productName;
+    private int productQauntity;
+    @JsonPropery("p-price")
+    private double productPrice;
+}
+```
+
+## Java Records
