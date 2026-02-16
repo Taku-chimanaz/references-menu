@@ -497,11 +497,25 @@ Records fields are final (not mutable)
 ## Path Variable
 
 ```java
-
+// http://localhost/hello/john-doe
 @GetMapping("/hello/{user-name}")
 public String sayHello(
     @PathVariable("user-name") String userName
 ){
     return "My value is: " + username
+}
+```
+
+## Request Parameters
+
+```java
+
+// http://localhost:8080/hello?param_name=paramvalue&param_name_2=value_2
+@GetMapping("/hello")
+public String sayHelloParams(
+    @RequestParams("user-name") String userName,
+    @RequestParams("user-lastName") String userLastName
+){
+    return "My value is: " + userName + " " + userLastName;
 }
 ```
