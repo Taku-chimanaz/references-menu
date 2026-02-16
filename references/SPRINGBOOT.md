@@ -480,3 +480,28 @@ public Order {
 ```
 
 ## Java Records
+
+```java
+
+public record OrderRecord(
+    String customerName,
+    String productName,
+    int quantity
+){
+}
+```
+
+Use records if you need simple carrier of data
+Records fields are final (not mutable)
+
+## Path Variable
+
+```java
+
+@GetMapping("/hello/{user-name}")
+public String sayHello(
+    @PathVariable("user-name") String userName
+){
+    return "My value is: " + username
+}
+```
