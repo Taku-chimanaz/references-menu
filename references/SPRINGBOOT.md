@@ -519,3 +519,231 @@ public String sayHelloParams(
     return "My value is: " + userName + " " + userLastName;
 }
 ```
+
+## Data JPA
+
+### Adding depedencies in pom.xml
+
+Under dependencies in the pom.xml file add the following dependency
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+</dependency>
+```
+
+After adding this dependency do not forget to reload your depedencies\
+You can do this by right clicking in the pom.xml file and navigating to maven and then select reload\
+In the above snippet we have added the dependency for Data JPA and also added the driver for postgresql
+
+### Database connection configuration
+
+You need to replace the application.properties with application.yml\
+
+```yml
+spring:
+  datasource:
+    url: [paste your database url here]
+    username: [database_username]
+    password: [database_password]
+    driver-class-name: org.postgresql.Driver
+```
+
+### Hibernate configuration
+
+```yml
+spring:
+  datasource:
+    url: [paste your database url here]
+    username: [database_username]
+    password: [database_password]
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+```
+
+ddl-auto - Tell Spring how to handle the schema create,update,deletion or validation.\
+show-sql - Toggles between showing and hiding the sql queries when we execute a piece of code that interacts with database.\
+format-sql - Formats the sql shown to you\
+database: Specifies the database that you are using\
+database-platform - Specifies the dialect(language) that is doing to be used
+
+### Entity Class
+
+```java
+@Entity
+@Table(name= "Students") // changing the table name from Student to Students
+class Student{
+
+    @Id
+    @GeneratedValue // tell JPA to generate the primary keys for us
+    private Integer id;
+
+    @Column(
+        name = "c_fname",
+        lenght = 250
+    ) // can change column name
+    private String firstname;
+    private String lastname;
+
+    @Column(
+        unique=true
+    ) // making the email unique
+    private String email;
+    private int age;
+
+
+    public Student(String firstname, String lastname, String email, int age){
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.age = age
+    }
+
+
+
+    //getters and setter
+    // generate them
+}
+
+```
+
+Entity - means a class that is meant to be persistant in a relational database using JPA.\
+Entity class should have a primary key - use @Id\
+You also need to add any empty constructor.\
+@Entity, @Table, @Id comes from jakarta.persistence
+
+## Persisting Data in Database
+
+This makes use of repositories\
+You must make an interface that extends the JPA repositoy interface\
+
+```java
+
+public interface StudentRepository extends JpaRepository<Student, Integer>{
+
+}
+```
+
+Next Step is to inject this into the file you need to use it e.g a controller
+
+```java
+
+@RestController
+public MyController{
+
+    private StudentRepository repository;
+
+    public MyController(StudentRepository repository){
+        this.repository = repository;
+    }
+
+    @GetMapping("/students")
+    public List<Student> getAllStudents(){
+        return repository.findAll();
+    }
+
+    // post
+
+    @GetMapping("/students")
+    public Student post(
+        @RequestBody Student student
+    ){
+        return repository.save(student);
+    }
+
+    // fetch by id
+     @GetMapping("/students/{student-id}")
+    public Student post(
+        @PathVariable("student-id") Integer id
+    ){
+        return repository.findById(id)
+                .orElse(new Student())
+    }
+
+    @DeleteMapping("/students/{student-id}")
+    public void delete(
+        @PathVariable("student-id") Integer id
+    ){
+        repository.deleteById(id)
+    }
+}
+
+```
+
+## Mapping and Relationships
+
+First you need to create the entities that you need to link
+After that you need to add annotation e.g @OneToOne, @ManyToOne, @OneToMany, etc.
+After that you then need to join the tables using the @JoinColumn Annotaion
+
+### One to One Mapping
+
+```Java
+
+public Student {
+
+    @OneToOne(
+        mappedBy = "student"
+        cascade = CascadeType.All
+    )
+    private StudentProfile studentProfile
+}
+
+public StudentProfile {
+    @OneToOne
+    @JoinColumn(
+        name = "student_id"
+    )
+    private Student student
+}
+
+```
+
+### One to Many Mapping
+
+```Java
+
+public Student {
+
+    @ManyToOne(
+        mappedBy = "student"
+        cascade = CascadeType.All
+    )
+    @JoinColumn(
+        name = "school_id"
+    )
+    private School school
+}
+
+public School {
+    @OneToMany(
+        mapped="school"
+    )
+    private List<Student> students
+}
+
+```
+
+## Adding Data for School
+
+To add data here you just need to create the controller and then the repository\
+Make use of @JsonManagedReference and @JsonBackReference
+
+@JsonManagedReference - This tell JPA or Hibernate that only the parent entity can serialize the child and child cannot serialize the parent.\
+@JsonBackReference - Is used so that it cannot serialize the parent\
+Both these are used on top of respective variable names
