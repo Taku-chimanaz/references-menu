@@ -744,6 +744,34 @@ public School {
 To add data here you just need to create the controller and then the repository\
 Make use of @JsonManagedReference and @JsonBackReference
 
-@JsonManagedReference - This tell JPA or Hibernate that only the parent entity can serialize the child and child cannot serialize the parent.\
-@JsonBackReference - Is used so that it cannot serialize the parent\
+**@JsonManagedReference** - This tell JPA or Hibernate that only the parent entity can serialize the child and child cannot serialize the parent.\
+**@JsonBackReference** - Is used so that it cannot serialize the parent\
 Both these are used on top of respective variable names
+
+## DTO (Data Transfer Object) Pattern
+
+A DTO is a simple Java object without business logic (just has getters,setters,maybe a constructor) that is used to transfer data between the layers of your application.\
+It is commonly used in transfering data between the service/controller layer and the client.
+
+```java
+// Entity
+@Entity
+public class User {
+    @Id
+    private Long id;
+    private String username;
+    private String email;
+    private String password;       // sensitive!
+    private String internalNotes;  // internal use only
+    private LocalDateTime createdAt;
+}
+
+// DTO - only expose what the client needs
+public record UserDTO(Long id, String username, String email) {}
+```
+
+### Problems beign solved by an Entity
+
+1. Over-exposure of sensitive data - An entity might contain passwords,internal flags,foreing keys and relationships and audit fields.
+1. Tight coupling - API is closely couplied with the database schema.An changes in the column name will break things for every consumer.
+1. Serialization issues with JPA - infinite loops from serializing relationships.
