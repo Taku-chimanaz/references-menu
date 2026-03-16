@@ -775,3 +775,375 @@ public record UserDTO(Long id, String username, String email) {}
 1. Over-exposure of sensitive data - An entity might contain passwords,internal flags,foreing keys and relationships and audit fields.
 1. Tight coupling - API is closely couplied with the database schema.An changes in the column name will break things for every consumer.
 1. Serialization issues with JPA - infinite loops from serializing relationships.
+
+## Service Layer
+
+A service layer stands as a middleman between the persistance layer and the controller.\
+It contains allow the business logic of the application and separates it from other layers.\
+
+```java
+
+// inject this to the controller file you need to use it in.
+@Service
+
+public class StudentMapper {
+    // student mapper
+}
+
+```
+
+## Data Validation
+
+1. Add the dependency
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+```
+
+1. Reload the project
+
+### Validate Objects using annotations
+
+1. Validate on the DTO level
+
+```java
+
+public record StudentDto(
+    @NotEmpty
+    String firstname,
+    @NotEmpty
+    String lastname,
+    String email,
+    Integer schoolId
+){
+
+}
+```
+
+2. Also add an annotation to the controller method you need to validate
+3. Use this on post methods not delete.Too lazy to change it
+
+```java
+
+
+    @DeleteMapping("/students/{student-id}")
+    public void delete(
+       @Valid @PathVariable("student-id") Integer id
+    ){
+        repository.deleteById(id)
+    }
+```
+
+4. Also add an exception to handle exceptions thrown due to violations of the data.
+
+```java
+
+```
+
+## Testing
+
+### Why test
+
+- Quality Assurance
+- Regression Testing
+- Documentation
+- Code Maintainabilty
+- Refactoring Confidence
+- Collaboration
+- Continuous Integration/Continious Deployment(CI/CD)
+- Reduced Debugging Time
+- Scalability
+- Security
+
+### Introductions
+
+- Spring provides utilities and annotations for testing
+
+```java
+package com.takudzwa.todo.todo;
+
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TodosMapperServiceTest {
+
+    @BeforeEach
+    void setup(){
+        System.out.println("inside a before each method");
+    }
+
+    @AfterEach
+    void tearDown() {
+        System.out.println("runs after each method");
+    }
+
+    @AfterAll
+    static void afterAll() {
+        System.out.println("runs after all the methods has been executed");
+    }
+
+    @BeforeAll
+    static void beforeAll() {
+        System.out.println("runs before any of the methods has been created");
+    }
+
+    @Test
+    public void testMethod1(){
+        System.out.println("inside test method 1");
+    }
+
+    @Test
+    public void testMethod2(){
+        System.out.println("Inside test method 2");
+    }
+
+}
+```
+
+## In-depth Spring JPA
+
+- Use of lombok to remove boilerplate i the project
+- Below are some of the useful annotations
+
+```java
+
+@Getter // You can replace @Getter and @Setter annotations with @Data(it has Getter,Setter and ArgsConstructor)
+@Setter
+@NoArgsConstructor
+@Entity
+public class Author {
+    // private fields
+}
+
+```
+
+### Primary Key Generation strategies
+
+- Each entity in requires a primary and these primary keys are generated using a strategy
+- There is Auto,SEQUENCE,TABLE,.. strategies
+
+### Auto Strategy
+
+I the Auto Strategy hibernate decides the best strategy for your Entity.\
+The default Strategy is AUTO
+
+### SEQUENCE
+
+- You choose the sequence you want to use for the generator
+
+```java
+
+public class Author {
+
+    @Id
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "author_sequence"
+    )
+
+    // by default hibernate will not find this generator(author_sequence)
+    // so you will have to create it
+
+    @SequenceGenerator(
+        name = "author_sequence",
+        sequenceName = "author_sequence",
+        allocationSize = 1
+    )
+
+    // allocation size just means the size of increments from the previous value
+    // here it starts from 1 and increments by 1
+}
+
+```
+
+### TABLE
+
+- You choose the sequence you want to use for the generator
+
+```java
+
+public class Author {
+
+    @Id
+    @GeneratedValue(
+        strategy = GenerationType.TABLE,
+        generator = "author_id_gen"
+    )
+
+    // by default hibernate will not find this generator(author_sequence)
+    // so you will have to create it
+
+    @TableGenerator(
+        name = "author_id_gen",
+        table = "id_generator",
+        pkColumnName = "id_name",
+        valueColumnName = "id_value",
+        allocationSize= 1
+    )
+
+    // allocation size just means the size of increments from the previous value
+    // here it starts from 1 and increments by 1
+}
+
+```
+
+### Running a bean at application startup
+
+```java
+public CommandLineRunner commandLineRunner(
+    AuthorRepository repository
+){
+    return args -> {
+        var author = Author.builder()
+        .firstName("")
+        .lastName("")
+        .age("")
+        .email("")
+        .build();
+        repository.save(author)
+    }
+}
+```
+
+At the entity level have the following annotations from lombok\
+
+```java
+@AllArgsConstructor
+@Builder
+```
+
+Builder allows us to use the .build method
+
+## Relationships explained
+
+### Many to Many
+
+I have two entities - Author and Course\
+For a many to many relationship here I can say:\
+
+```
+An Author can create many course.A Course can be created(in collaboration) by many courses
+```
+
+## BASE Entity
+
+```java
+package com.example.data_jpa.models;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+@MappedSuperclass
+public class BaseEntity {
+
+    @Id
+    @GeneratedValue
+    private Integer id;
+    private LocalDateTime createdAt;
+    private LocalDateTime lastModifiedAt;
+    private String createdBy;
+    private String lastModifiedBy;
+}
+
+```
+
+## Composite Ids
+
+- This is the combination of two ununique ids to create a unique id in the table
+- Create a class which is not an entity but will be the composite ID and this class should implement Serializable interface
+
+```java
+// have other lombok annotations (Data, AllArgsConstructor, NoArgs...)
+@Embeddable
+public class OrderId implements Serializable {
+    private String username;
+    private LocalDateTime orderOrder
+}
+
+// This is the entity
+
+@Entity
+public class Order {
+
+    @EmbeddedId
+    private OrderId id;
+    private String orderDesc;
+    private String orderField;
+}
+
+```
+
+## Embeddable Entities
+
+- Can be used to reuse entities in your code
+
+```java
+// have other lombok annotations
+@Embeddable
+public class Address {
+
+   private String streetName;
+   private String city;
+   private String town;
+}
+
+// Main Enity
+// lombok annotations
+@Entity
+
+public class Address {
+
+   @Embedded
+   private Address address
+}
+
+```
+
+## Custom Queries Inside a JPA repo
+
+```java
+
+public interface AuthorRepository extends JpaRepository<Author,Integer>{
+
+    List<Author> findAllByFirstName(string fn)
+
+    // make case insensitive
+
+    List<Author> findAllByFirstNameIgnoreCase(string fn);
+
+    List<Author> findAllByFirstNameContainingIngoreCase(string fn);
+}
+```
+
+## NamedQuires
+
+- Allows you to group custom quires in sql
+
+```java
+@NamedQuery(
+    name = "Author.findByNameQuery"
+    name = 'select a from Author where a.age > 60'
+)
+
+
+// this goes inside a jpaRepository interface
+
+@Transactional
+List<Author> findByNameQuery(@Param("age") int age);
+
+// when updating
+// always use @Modifying and @Transactional
+
+
+```
